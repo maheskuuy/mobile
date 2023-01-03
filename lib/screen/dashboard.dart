@@ -1,17 +1,17 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
-// import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:project_tiket/account.dart';
+import 'package:project_tiket/const.dart';
 import 'package:project_tiket/main.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:project_tiket/model/film.dart';
 import 'package:project_tiket/models/NowShowing.dart';
-import 'package:project_tiket/models/carousel.dart';
 import 'package:project_tiket/models/film_detail.dart';
 import 'package:project_tiket/screen/login.dart';
+import 'package:project_tiket/screen/search.dart';
 import 'package:project_tiket/service/filmService.dart';
 
 class dashboard extends StatefulWidget {
@@ -22,12 +22,12 @@ class dashboard extends StatefulWidget {
 }
 
 class _dashboardState extends State<dashboard> {
-  final String url =
-      'http://10.0.2.2/Web_Server_GM/php/restAPI.php?function=get_film';
 
   Future getFilm() async {
-    var response = await http.get(Uri.parse(url));
-    print(json.decode(response.body));
+    //mengambil data film
+    var params = "function=get_film";
+    var response = await http.get(Uri.parse(pallete.sUrl + params));
+    // print(json.decode(response.body));
     return json.decode(response.body);
   }
 
@@ -41,13 +41,6 @@ class _dashboardState extends State<dashboard> {
   }
   // end
 
-  // List<T>? map<T>(List list, Function handler) {
-  //   List<T> result = [];
-  //   for (var i = 0; i < list.length; i++) {
-  //     result.add(handler(i, list[i]));
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -58,16 +51,20 @@ class _dashboardState extends State<dashboard> {
         elevation: 0,
         leading: GestureDetector(
           onTap: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => accountDetail()));
+            Navigator.push(
+              context, MaterialPageRoute(builder: (context) => (Profile())));
           },
-          child: CircleAvatar(
+          child: Container(
+          padding: EdgeInsets.all(8),
+          width: 58,
+          child: CircleAvatar(   
             backgroundImage: AssetImage(
-              'assets/images/man2.png',
-            ),
-            radius: 5,
+              'assets/images/man2.png'
+            )
           ),
         ),
+        ),
+        
         //title
         centerTitle: true,
         title: Text('Hello, Azriel!'),
@@ -76,13 +73,16 @@ class _dashboardState extends State<dashboard> {
         actions: <Widget>[
           IconButton(
             icon: new Icon(Icons.search, color: Colors.white),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => searchPage()));
+            },
           ),
           //action notification
-          IconButton(
-            icon: new Icon(Icons.notifications_none, color: Colors.white),
-            onPressed: () {},
-          ),
+          // IconButton(
+          //   icon: new Icon(Icons.notifications_none, color: Colors.white),
+          //   onPressed: () {},
+          // ),
         ],
       ),
       //bottom navigation
@@ -109,35 +109,6 @@ class _dashboardState extends State<dashboard> {
                       ),
                     ),
 
-                    //Carrousel
-                    // Container(
-                    //   alignment: Alignment.centerLeft,
-                    //   margin: EdgeInsets.only(left: 16, right: 16),
-                    //   width: MediaQuery.of(context).size.width,
-                    //   height: 190,
-                    //   child: Swiper(
-                    //     onIndexChanged: (index) {
-                    //       setState(() {
-                    //         _current = index;
-                    //       });
-                    //     },
-                    //     autoplay: false,
-                    //     layout: SwiperLayout.DEFAULT,
-                    //     itemCount: carousels.length,
-                    //     itemBuilder: (BuildContext context, index) {
-                    //       return Container(
-                    //         decoration: BoxDecoration(
-                    //           borderRadius: BorderRadius.circular(8),
-                    //           image: DecorationImage(
-                    //               image: AssetImage(
-                    //                 carousels[index].image,
-                    //               ),
-                    //               fit: BoxFit.cover),
-                    //         ),
-                    //       );
-                    //     },
-                    //   ),
-                    // ),
                     //SEDANG TAYANG
                     SizedBox(height: 10),
                     Padding(
@@ -157,7 +128,7 @@ class _dashboardState extends State<dashboard> {
                     Container(
                       height: 320,
                       child: ListView.builder(
-                          itemCount: snapshot.data['data'].length,
+                          itemCount: snapshot.data["data"].length,
                           padding: EdgeInsets.only(left: 20),
                           scrollDirection: Axis.horizontal,
                           itemBuilder: (context, index) {
@@ -174,8 +145,8 @@ class _dashboardState extends State<dashboard> {
                                               MaterialPageRoute(
                                                   builder: (context) =>
                                                       FilmDetail(
-                                                        product: snapshot
-                                                                .data['data']
+                                                        Movie: snapshot
+                                                                .data["data"]
                                                             [index],
                                                       )));
                                         },
@@ -187,7 +158,7 @@ class _dashboardState extends State<dashboard> {
                                                 BorderRadius.circular(10),
                                             image: DecorationImage(
                                               image: NetworkImage(
-                                                  snapshot.data['data'][index]
+                                                  snapshot.data["data"][index]
                                                       ['Poster']),
                                               fit: BoxFit.cover,
                                             ),
@@ -198,7 +169,7 @@ class _dashboardState extends State<dashboard> {
                                         bottom: 8,
                                         left: 8,
                                         child: Text(
-                                          snapshot.data['data'][index]['Judul'],
+                                          snapshot.data["data"][index]['Judul'],
                                           style: GoogleFonts.openSans(
                                               fontWeight: FontWeight.w600,
                                               color: Colors.white,

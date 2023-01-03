@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:project_tiket/screen/dashboard.dart';
-import 'package:project_tiket/screen/google_signup.dart';
 import 'package:project_tiket/screen/login.dart';
 import 'package:project_tiket/service/dataUserService.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
@@ -35,6 +33,7 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
+
   TextEditingController usernameController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
   TextEditingController emailController = TextEditingController();
@@ -90,13 +89,21 @@ class _RegisterPageState extends State<RegisterPage> {
             children: <Widget>[
               Container(
                 alignment: Alignment.topLeft,
-                padding: EdgeInsets.only(left: 10, bottom: 2, top: 10),
-                child: Text(
-                  'Create Account',
-                  style: GoogleFonts.raleway(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20),
+                padding: EdgeInsets.only(left: 10, bottom: 2, ),
+                child: Row(
+                  children: [
+                    Text(
+                      'Create Account',
+                      style: GoogleFonts.raleway(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 23),
+                    ),
+                    IconButton(
+            icon: new Icon(Icons.account_circle, color: Colors.white),
+            onPressed: () {},
+          ),
+                  ],
                 ),
               ),
               Container(
@@ -116,6 +123,7 @@ class _RegisterPageState extends State<RegisterPage> {
               Container(
                 padding: EdgeInsets.all(10),
                 child: TextField(
+                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.normal),
                   controller: usernameController,
                   decoration: InputDecoration(
                     labelText: 'Username',
@@ -124,7 +132,6 @@ class _RegisterPageState extends State<RegisterPage> {
                       color: Color(0xfF6F6F6F),
                       fontSize: 14,
                     ),
-
                     enabledBorder: myinputborder(),
                     focusedBorder: myfocusborder(),
                   ),
@@ -133,6 +140,7 @@ class _RegisterPageState extends State<RegisterPage> {
               Container(
                 padding: EdgeInsets.all(10),
                 child: TextField(
+                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.normal),
                   controller: phoneController,
                   decoration: InputDecoration(
                     labelText: 'Phone Number',
@@ -149,6 +157,7 @@ class _RegisterPageState extends State<RegisterPage> {
               Container(
                 padding: EdgeInsets.all(10),
                 child: TextField(
+                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.normal),
                   controller: emailController,
                   decoration: InputDecoration(
                     labelText: 'Email Addres',
@@ -162,10 +171,11 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                 ),
               ),
+
+              
               Container(
                 padding: EdgeInsets.all(10),
                 child: TextField(
-                  obscureText: true,
                   controller: passwordController,
                   decoration: InputDecoration(
                     labelText: 'Password',

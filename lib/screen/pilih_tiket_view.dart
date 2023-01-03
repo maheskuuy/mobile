@@ -1,11 +1,31 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../controlers/pilih_tiket_controller.dart';
-import 'package:project_tiket/controlers/pilih_tiket_controller.dart';
+import 'package:project_tiket/components/cinema_seat.dart';
 
-class PilihTiketView extends GetView<PilihTiketController> {
-  final PilihTiketController controller = Get.put(PilihTiketController());
+class PilihTiketView extends StatefulWidget {
+  bool isReserved;
+  bool isSelected;
+
+  PilihTiketView({Key? key, this.isSelected = false, this.isReserved = false})
+      : super(key: key);
+
+  @override
+  State<PilihTiketView> createState() => _PilihTiketViewState();
+}
+
+class _PilihTiketViewState extends State<PilihTiketView> {
+  final String url =
+      'http://10.0.2.2/Web_Server_GM/php/restAPI.php?function=get_film';
+
+  Future getFilm() async {
+    var response = await http.get(Uri.parse(url));
+    print(json.decode(response.body));
+    return json.decode(response.body);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,41 +70,91 @@ class PilihTiketView extends GetView<PilihTiketController> {
                 ),
               ),
               SizedBox(height: 10),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Container(
-                          color: Colors.transparent,
-                          child: Obx(
-                            () => GridView.count(
-                              padding: EdgeInsets.all(10),
-                              scrollDirection: Axis.horizontal,
-                              mainAxisSpacing: 10,
-                              crossAxisSpacing: 10,
-                              crossAxisCount: 8,
-                              children: List.generate(
-                                controller.kursi.length,
-                                (index) => Container(
-                                  width: 50,
-                                  height: 50,
-                                  decoration: BoxDecoration(
-                                      color: ["status"] == "tersedia"
-                                          ? Color(0xfF514F64)
-                                          : Color(0xfF514F64),
-                                      borderRadius: BorderRadius.circular(3)),
-                                ),
+              FutureBuilder(
+                  future: getFilm(),
+                  builder: (context, snapshot) {
+                    return Container(
+                      height: 100,
+                      child: ListView.builder(
+                          itemCount: snapshot.data["data"].length,
+                          padding: EdgeInsets.only(left: 20),
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (context, index) {
+                            return Container(
+                              margin: EdgeInsets.only(right: 20),
+                              child: Column(
+                                children: <Widget>[
+                                  Stack(
+                                    children: <Widget>[
+                                      Container(
+                                        child: SingleChildScrollView(
+                                          scrollDirection: Axis.horizontal,
+                                          child: Column(
+                                            children: <Widget>[
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: <Widget>[
+                                                  GestureDetector(
+                                                    onTap: () {
+                                                      setState(() {
+                                                        !widget.isReserved
+                                                            ? widget.isSelected =
+                                                                !widget
+                                                                    .isSelected
+                                                            : null;
+                                                      });
+                                                    },
+                                                    child: Container(
+                                                      margin: const EdgeInsets
+                                                              .symmetric(
+                                                          horizontal: 4.0,
+                                                          vertical: 5.0),
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width /
+                                                              9,
+                                                      height:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width /
+                                                              9,
+                                                      decoration: BoxDecoration(
+                                                          color: widget
+                                                                  .isSelected
+                                                              ? Color(
+                                                                  0xFF6C61AF)
+                                                              : !widget
+                                                                      .isSelected
+                                                                  ? Color(
+                                                                      0xfF514F64)
+                                                                  : null,
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      5.0)),
+                                                      child: Text(snapshot
+                                                              .data["data"]
+                                                          [index]['Durasi']),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                ],
                               ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+                            );
+                          }),
+                    );
+                  }),
+              //row 1
+
               Container(
                 height: 100,
                 padding: EdgeInsets.symmetric(horizontal: 25),
@@ -106,11 +176,15 @@ class PilihTiketView extends GetView<PilihTiketController> {
                   ],
                 ),
               ),
-              SizedBox(height: 10),
-
               Container(
-                height: 100,
-              ),
+                height: 110,
+                decoration: BoxDecoration(
+                  color: Color(0xFf272944),
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(30),
+                      topRight: Radius.circular(30)),
+                ),
+              )
             ],
           ),
         ],
