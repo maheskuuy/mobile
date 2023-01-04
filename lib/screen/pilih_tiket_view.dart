@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:project_tiket/components/cinema_seat.dart';
+import 'package:project_tiket/const.dart';
 
 class PilihTiketView extends StatefulWidget {
   bool isReserved;
@@ -17,12 +18,11 @@ class PilihTiketView extends StatefulWidget {
 }
 
 class _PilihTiketViewState extends State<PilihTiketView> {
-  final String url =
-      'http://10.0.2.2/Web_Server_GM/php/restAPI.php?function=get_film';
-
-  Future getFilm() async {
-    var response = await http.get(Uri.parse(url));
-    print(json.decode(response.body));
+ Future getFilm() async {
+    //mengambil data film
+    var params = "function=get_film";
+    var response = await http.get(Uri.parse(pallete.sUrl + params));
+    // print(json.decode(response.body));
     return json.decode(response.body);
   }
 
@@ -227,3 +227,4 @@ class ItemStatus extends StatelessWidget {
     );
   }
 }
+

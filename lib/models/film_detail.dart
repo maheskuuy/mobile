@@ -10,9 +10,9 @@ import 'package:http/http.dart' as http;
 
 class FilmDetail extends StatelessWidget {
   //API
-  Future getStudio() async {
-    // mengambil data studio
-    var params = "function=get_studio";
+  Future getColab() async {
+    // mengambil data join table
+    var params = "function=get_colab";
     var response = await http.get(Uri.parse(pallete.sUrl + params));
     // print(json.decode(response.body));
     return json.decode(response.body);
@@ -27,6 +27,7 @@ class FilmDetail extends StatelessWidget {
   }
 
   //END API
+
   final Map Movie; // pemanggil api sebelumnya
 
   FilmDetail({required this.Movie});
@@ -34,10 +35,6 @@ class FilmDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   backgroundColor: Colors.transparent,
-      //   elevation: 0,
-      // ),
       backgroundColor: Color(0xfF1C1D27),
       body: Stack(
         children: [
@@ -290,11 +287,12 @@ class FilmDetail extends StatelessWidget {
                   SizedBox(
                     height: 20,
                   ),
+                  // dropdown button
                   FutureBuilder(
-                      future: getStudio(),
+                      future: getColab(),
                       builder: (context, snapshot) {
                         return Container(
-                          height: 20,
+                          height: 1000,
                           child: ListView.builder(
                               itemCount: snapshot.data["data"].length,
                               padding: EdgeInsets.only(left: 20),
@@ -310,43 +308,75 @@ class FilmDetail extends StatelessWidget {
                                             child: Padding(
                                               padding: EdgeInsets.symmetric(
                                                   horizontal: 20),
-                                              child: Row(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
+                                              child: Column(
                                                 children: [
-                                                  Icon(
-                                                    Icons.villa_outlined,
-                                                    color: Colors.white,
+                                                  Row(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Icon(
+                                                        Icons.villa_outlined,
+                                                        color: Colors.white,
+                                                      ),
+                                                      SizedBox(
+                                                        width: 10,
+                                                      ),
+                                                      Text(
+                                                        snapshot.data["data"]
+                                                                [index]
+                                                            ['Nama_studio'],
+                                                        style: GoogleFonts
+                                                            .openSans(
+                                                          color: Colors.white,
+                                                          fontSize: 18,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                                        textAlign:
+                                                            TextAlign.left,
+                                                      ),
+                                                      SizedBox(
+                                                        height: 10,
+                                                        width: 5,
+                                                      ),
+                                                      Text(
+                                                        snapshot.data["data"]
+                                                                [index]
+                                                            ['alamat_studio'],
+                                                        style: GoogleFonts
+                                                            .openSans(
+                                                          color: Colors.white,
+                                                          fontSize: 18,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                                        textAlign:
+                                                            TextAlign.left,
+                                                      ),
+                                                    ],
                                                   ),
-                                                  SizedBox(
-                                                    width: 10,
-                                                  ),
-                                                  Text(
-                                                    snapshot.data["data"][index]
-                                                        ['Nama_studio'],
-                                                    style: GoogleFonts.openSans(
-                                                      color: Colors.white,
-                                                      fontSize: 18,
-                                                      fontWeight:
-                                                          FontWeight.bold,
+                                                  GestureDetector(
+                                                    onTap: () {
+                                                      Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  PilihTiketView()));
+                                                    },
+                                                    child:Container(
+                                                    child: Row(
+                                                      children: [
+                                                        Chip(
+                                                          label: Text(snapshot
+                                                                      .data[
+                                                                  "data"][index]
+                                                              ['Jam_mulai']),
+                                                        ),
+                                                      ],
                                                     ),
-                                                    textAlign: TextAlign.left,
                                                   ),
-                                                  SizedBox(
-                                                    height: 10,
-                                                    width: 5,
-                                                  ),
-                                                  Text(
-                                                    snapshot.data["data"][index]
-                                                        ['alamat_studio'],
-                                                    style: GoogleFonts.openSans(
-                                                      color: Colors.white,
-                                                      fontSize: 18,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
-                                                    textAlign: TextAlign.left,
-                                                  ),
+                                                  )
                                                 ],
                                               ),
                                             ),
@@ -359,28 +389,6 @@ class FilmDetail extends StatelessWidget {
                               }),
                         );
                       }),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => PilihTiketView()));
-                    },
-                    child: Container(
-                      padding: EdgeInsets.only(left: 15),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Chip(
-                            label: Text('10.00'),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
                 ],
               ),
             ),
@@ -390,3 +398,21 @@ class FilmDetail extends StatelessWidget {
     );
   }
 }
+
+
+// SizedBox(
+                  //   height: 10,
+                  // ),
+                 
+                  //   child: Container(
+                  //     padding: EdgeInsets.only(left: 15),
+                  //     child: Row(
+                  //       mainAxisAlignment: MainAxisAlignment.start,
+                  //       children: [
+                  //         Chip(
+                  //           label: Text('10.00'),
+                  //         ),
+                  //       ],
+                  //     ),
+                  //   ),
+                  // ),
