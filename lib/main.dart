@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:project_tiket/screen/dashboard.dart';
 import 'package:project_tiket/screen/homepage.dart';
 import 'package:project_tiket/screen/login.dart';
-import 'package:project_tiket/screen/pilih_tiket_view.dart';
+import 'package:project_tiket/screen/pilih_kursi.dart';
 import 'package:get/get.dart';
 import 'package:project_tiket/screen/register.dart';
 
@@ -15,9 +15,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: AnimatedSplashScreen(
-        splash: Icons.adb_sharp,
-        duration: 3000,
+        splash: Image.asset('assets/images/GM_TICH.png',),
+        splashIconSize: 1000,
+        duration: 3500,
         splashTransition: SplashTransition.scaleTransition,
+        centered: true,
         backgroundColor: Colors.white,
         nextScreen: Login(),
       ),

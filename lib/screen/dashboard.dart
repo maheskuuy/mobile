@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'dart:ffi';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -22,7 +24,7 @@ class dashboard extends StatefulWidget {
 }
 
 class _dashboardState extends State<dashboard> {
-
+  
   Future getFilm() async {
     //mengambil data film
     var params = "function=get_film";
@@ -40,6 +42,12 @@ class _dashboardState extends State<dashboard> {
     });
   }
   // end
+//carousel
+  final List<String> imgList = [
+    'assets/images/carousel_blackpanther.png',
+    'assets/images/carousel_pengabdisetan2.png',
+    'assets/images/carousel_qodrat.png'
+  ]; 
 
   @override
   Widget build(BuildContext context) {
@@ -52,19 +60,16 @@ class _dashboardState extends State<dashboard> {
         leading: GestureDetector(
           onTap: () {
             Navigator.push(
-              context, MaterialPageRoute(builder: (context) => (Profile())));
+                context, MaterialPageRoute(builder: (context) => (Profile())));
           },
           child: Container(
-          padding: EdgeInsets.all(8),
-          width: 58,
-          child: CircleAvatar(   
-            backgroundImage: AssetImage(
-              'assets/images/man2.png'
-            )
+            padding: EdgeInsets.all(8),
+            width: 58,
+            child: CircleAvatar(
+                backgroundImage: AssetImage('assets/images/man2.png')),
           ),
         ),
-        ),
-        
+
         //title
         centerTitle: true,
         title: Text('Hello, Azriel!'),
@@ -75,19 +80,13 @@ class _dashboardState extends State<dashboard> {
             icon: new Icon(Icons.search, color: Colors.white),
             onPressed: () {
               Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => searchPage()));
+                  MaterialPageRoute(builder: (context) => searchPage()));
             },
           ),
-          //action notification
-          // IconButton(
-          //   icon: new Icon(Icons.notifications_none, color: Colors.white),
-          //   onPressed: () {},
-          // ),
         ],
       ),
-      //bottom navigation
-      // bottomNavigationBar: BottomNavigationGM(),
-      body: FutureBuilder(
+
+      body:FutureBuilder(
           future: getFilm(),
           builder: (context, snapshot) {
             return Center(
@@ -95,11 +94,50 @@ class _dashboardState extends State<dashboard> {
                 child: ListView(
                   physics: ClampingScrollPhysics(),
                   children: <Widget>[
-                    //Location
 
-                    Padding(
+                    Container(//carousel
+          child:CarouselSlider(
+            options: CarouselOptions(
+              autoPlay: false,
+              aspectRatio: 2.0,
+              enlargeCenterPage: true,
+            ),
+            items: imgList
+    .map((item) => Container(
+            child: Container(
+              margin: EdgeInsets.all(0.0),
+              child: ClipRRect(
+                  borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                  child: Stack(
+                    children: <Widget>[
+                      Image.asset(item, fit: BoxFit.cover, width: 1000.0),
+                      Positioned(
+                        bottom: 0.0,
+                        left: 0.0,
+                        right: 0.0,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [
+                                Color.fromARGB(200, 0, 0, 0),
+                                Color.fromARGB(0, 0, 0, 0)
+                              ],
+                              begin: Alignment.bottomCenter,
+                              end: Alignment.topCenter,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  )),
+            ),
+          ))
+    .toList(),
+          ),
+      ),
+                    Padding(//Location
                       padding: EdgeInsets.only(
-                          top: 15, left: 16, right: 16, bottom: 20),
+                           left: 16, right: 16, bottom: 20),
                       child: Text(
                         'Jember, Jawa Timur',
                         style: TextStyle(
@@ -108,10 +146,7 @@ class _dashboardState extends State<dashboard> {
                         ),
                       ),
                     ),
-
-                    //SEDANG TAYANG
-                    SizedBox(height: 10),
-                    Padding(
+                    Padding(//SEDANG TAYANG
                       padding: EdgeInsets.only(left: 16, right: 16, bottom: 5),
                       child: Text(
                         'Now Showing',
@@ -125,7 +160,7 @@ class _dashboardState extends State<dashboard> {
                     SizedBox(
                       height: 10,
                     ),
-                    Container(
+                    Container(//data film
                       height: 320,
                       child: ListView.builder(
                           itemCount: snapshot.data["data"].length,
@@ -244,8 +279,12 @@ class _dashboardState extends State<dashboard> {
                 ),
               ),
             );
-          }),
-
+          }
+          ), 
+      
+      
+             
+            
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
@@ -272,3 +311,164 @@ class _dashboardState extends State<dashboard> {
     );
   }
 }
+
+//
+// FutureBuilder(
+//           future: getFilm(),
+//           builder: (context, snapshot) {
+//             return Center(
+//               child: Container(
+//                 child: ListView(
+//                   physics: ClampingScrollPhysics(),
+//                   children: <Widget>[
+//                     //Location
+
+//                     Padding(
+//                       padding: EdgeInsets.only(
+//                           top: 15, left: 16, right: 16, bottom: 20),
+//                       child: Text(
+//                         'Jember, Jawa Timur',
+//                         style: TextStyle(
+//                           fontWeight: FontWeight.bold,
+//                           color: Colors.white,
+//                         ),
+//                       ),
+//                     ),
+
+//                     //SEDANG TAYANG
+//                     SizedBox(height: 10),
+//                     Padding(
+//                       padding: EdgeInsets.only(left: 16, right: 16, bottom: 5),
+//                       child: Text(
+//                         'Now Showing',
+//                         style: GoogleFonts.openSans(
+//                           fontWeight: FontWeight.bold,
+//                           color: Colors.white,
+//                           fontSize: 24,
+//                         ),
+//                       ),
+//                     ),
+//                     SizedBox(
+//                       height: 10,
+//                     ),
+//                     Container(
+//                       height: 320,
+//                       child: ListView.builder(
+//                           itemCount: snapshot.data["data"].length,
+//                           padding: EdgeInsets.only(left: 20),
+//                           scrollDirection: Axis.horizontal,
+//                           itemBuilder: (context, index) {
+//                             return Container(
+//                               margin: EdgeInsets.only(right: 20),
+//                               child: Column(
+//                                 children: <Widget>[
+//                                   Stack(
+//                                     children: <Widget>[
+//                                       GestureDetector(
+//                                         onTap: () {
+//                                           Navigator.push(
+//                                               context,
+//                                               MaterialPageRoute(
+//                                                   builder: (context) =>
+//                                                       FilmDetail(
+//                                                         Movie: snapshot
+//                                                                 .data["data"]
+//                                                             [index],
+//                                                       )));
+//                                         },
+//                                         child: Container(
+//                                           height: 320,
+//                                           width: 200,
+//                                           decoration: BoxDecoration(
+//                                             borderRadius:
+//                                                 BorderRadius.circular(10),
+//                                             image: DecorationImage(
+//                                               image: NetworkImage(
+//                                                   snapshot.data["data"][index]
+//                                                       ['Poster']),
+//                                               fit: BoxFit.cover,
+//                                             ),
+//                                           ),
+//                                         ),
+//                                       ),
+//                                       Positioned(
+//                                         bottom: 8,
+//                                         left: 8,
+//                                         child: Text(
+//                                           snapshot.data["data"][index]['Judul'],
+//                                           style: GoogleFonts.openSans(
+//                                               fontWeight: FontWeight.w600,
+//                                               color: Colors.white,
+//                                               fontSize: 14,
+//                                               backgroundColor: Colors.black),
+//                                         ),
+//                                       )
+//                                     ],
+//                                   )
+//                                 ],
+//                               ),
+//                             );
+//                           }),
+//                     ),
+//                     //COMING SOON
+//                     SizedBox(height: 10),
+//                     Padding(
+//                       padding: EdgeInsets.only(left: 16, right: 16, bottom: 5),
+//                       child: Text(
+//                         'Coming Soon',
+//                         style: GoogleFonts.openSans(
+//                           fontWeight: FontWeight.bold,
+//                           color: Colors.white,
+//                           fontSize: 24,
+//                         ),
+//                       ),
+//                     ),
+//                     Container(
+//                       height: 320,
+//                       child: ListView.builder(
+//                           itemCount: showing.length,
+//                           padding: EdgeInsets.only(left: 0),
+//                           scrollDirection: Axis.horizontal,
+//                           itemBuilder: (context, index) {
+//                             return Container(
+//                               margin: EdgeInsets.only(right: 0),
+//                               width: 200,
+//                               child: Column(
+//                                 children: <Widget>[
+//                                   Stack(
+//                                     children: <Widget>[
+//                                       Container(
+//                                         height: 320,
+//                                         decoration: BoxDecoration(
+//                                           borderRadius:
+//                                               BorderRadius.circular(8),
+//                                           image: DecorationImage(
+//                                               image: AssetImage(
+//                                                   showing[index].image),
+//                                               fit: BoxFit.cover),
+//                                         ),
+//                                       ),
+//                                       Positioned(
+//                                         bottom: 8,
+//                                         left: 8,
+//                                         child: Text(
+//                                           showing[index].nama,
+//                                           style: GoogleFonts.openSans(
+//                                               fontWeight: FontWeight.w600,
+//                                               color: Colors.white,
+//                                               fontSize: 14),
+//                                         ),
+//                                       )
+//                                     ],
+//                                   )
+//                                 ],
+//                               ),
+//                             );
+//                           }),
+//                     ),
+//                   ],
+//                 ),
+//               ),
+//             );
+//           }
+//           ),

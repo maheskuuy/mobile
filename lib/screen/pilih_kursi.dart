@@ -7,17 +7,21 @@ import 'package:project_tiket/components/cinema_seat.dart';
 import 'package:project_tiket/const.dart';
 
 class PilihTiketView extends StatefulWidget {
+   final Map DMovie; // pemanggil api sebelumnya
   bool isReserved;
   bool isSelected;
-
-  PilihTiketView({Key? key, this.isSelected = false, this.isReserved = false})
+  
+  PilihTiketView({Key? key, this.isSelected = false, this.isReserved = false, required this.DMovie,})
       : super(key: key);
+
 
   @override
   State<PilihTiketView> createState() => _PilihTiketViewState();
 }
 
 class _PilihTiketViewState extends State<PilihTiketView> {
+
+
  Future getFilm() async {
     //mengambil data film
     var params = "function=get_film";
@@ -39,7 +43,7 @@ class _PilihTiketViewState extends State<PilihTiketView> {
           onPressed: () {},
         ),
         title: Text(
-          "Pengabdi Setan 2",
+          widget.DMovie['Judul'],
           style: GoogleFonts.openSans(
             fontSize: 18,
             fontWeight: FontWeight.bold,
@@ -154,7 +158,6 @@ class _PilihTiketViewState extends State<PilihTiketView> {
                     );
                   }),
               //row 1
-
               Container(
                 height: 100,
                 padding: EdgeInsets.symmetric(horizontal: 25),
