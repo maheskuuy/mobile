@@ -9,14 +9,14 @@ import 'package:project_tiket/service/filmService.dart';
 import 'package:http/http.dart' as http;
 
 class FilmDetail extends StatelessWidget {
-   final Map Movie; // pemanggil api sebelumnya
+  final Map Movie; // pemanggil api sebelumnya
 
   FilmDetail({required this.Movie});
-  
+
   //API
   Future getColabs() async {
     // mengambil data join table
-    var params = "function=get_colab_kondisi&&Judul="+Movie['Judul'];
+    var params = "function=get_colab_kondisi&&Judul=" + Movie['Judul'];
     var response = await http.get(Uri.parse(pallete.sUrl + params));
     // print(json.decode(response.body));
     return json.decode(response.body);
@@ -362,24 +362,37 @@ class FilmDetail extends StatelessWidget {
                                                           MaterialPageRoute(
                                                               builder: (context) =>
                                                                   PilihTiketView(
-                                                        DMovie: snapshot
-                                                                .data["data"]
-                                                            [index],
-                                                      )));
+                                                                    DMovie: snapshot
+                                                                            .data["data"]
+                                                                        [index],
+                                                                  )));
                                                     },
-                                                    child:Container(
-                                                    child: Row(
-                                                      children: [
-                                                        Chip(
-                                                          label: Text(snapshot
-                                                                      .data[
-                                                                  "data"][index]
-                                                              ['Jam_mulai']),
-                                                        ),
-                                                        
-                                                      ],
+                                                    child: Container(
+                                                      child: Row(
+                                                        children: [
+                                                          Chip(
+                                                            label: Text(
+                                                              snapshot.data[
+                                                                          "data"]
+                                                                      [index]
+                                                                  ['Jam_mulai'],
+                                                              style: TextStyle(
+                                                                color: Colors
+                                                                    .white,
+                                                              ),
+                                                            ),
+                                                            backgroundColor:
+                                                                Color(0xfF1C1D27),
+                                                            shape: StadiumBorder(
+                                                                side: BorderSide(
+                                                              width: 0.8,
+                                                              color: Colors
+                                                                  .white,
+                                                            )),
+                                                          ),
+                                                        ],
+                                                      ),
                                                     ),
-                                                  ),
                                                   )
                                                 ],
                                               ),
