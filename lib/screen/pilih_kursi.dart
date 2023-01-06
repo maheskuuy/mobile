@@ -5,6 +5,8 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:project_tiket/components/cinema_seat.dart';
 import 'package:project_tiket/const.dart';
+import 'package:project_tiket/screen/transaksi.dart';
+import 'package:project_tiket/service/datatransaksi.dart';
 
 class PilihTiketView extends StatefulWidget {
   final Map DMovie; // pemanggil api sebelumnya
@@ -24,6 +26,17 @@ class PilihTiketView extends StatefulWidget {
 }
 
 class _PilihTiketViewState extends State<PilihTiketView> {
+  var order_time=DateTime.now();
+  void createDataTransaksi() {
+    transaksiService()
+        .add_transaksi('', order_time.toString(), '5',
+           widget.DMovie['Id_jadwal'], widget.DMovie['Id_studio'])
+        .then((value) {
+      setState(() {
+      });
+    });
+  }
+
   int selectedIndex = -1;
   Future getFilm() async {
     //mengambil data film
@@ -165,8 +178,7 @@ class _PilihTiketViewState extends State<PilihTiketView> {
                                                               child: Text(
                                                                   snapshot.data[
                                                                               "data"]
-                                                                          [
-                                                                          index]
+                                                                          [index]
                                                                       [
                                                                       'No_kursi'],
                                                                   style: GoogleFonts
@@ -339,48 +351,56 @@ class _PilihTiketViewState extends State<PilihTiketView> {
 
                           //MENAMPILKAN BANYAK KURSI TERPILIH
 
-                          Container(
-                            height: 20,
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 20),
-                              child: Row(
-                                children: [
-                                  Text(
-                                    'kursi terpilih',
-                                    style: GoogleFonts.openSans(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.normal,
-                                      color: Colors.white24,
-                                    ),
-                                  ),
-                                  Flexible(
-                                    fit: FlexFit.tight,
-                                    child: Padding(
-                                      padding: EdgeInsets.only(right: 20),
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceAround,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.end,
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Text(
-                                            'haloo',
-                                            style: TextStyle(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.white),
-                                            maxLines: 1,
-                                            softWrap: false,
-                                            overflow: TextOverflow.fade,
+                          FutureBuilder(
+                            future: getjdwl_kursi(),
+                            builder: (context, snapshot) {
+                              return Container(
+                                height: 20,
+                                child: ListView.builder(
+                                  itemCount: snapshot.data["data"].length,
+                                    padding: const EdgeInsets.only(left: 20),
+                                    itemBuilder: (context, index) {
+                                    return Row(
+                                      children: [
+                                        Text(
+                                          'kursi terpilih',
+                                          style: GoogleFonts.openSans(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.normal,
+                                            color: Colors.white24,
                                           ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
+                                        ),
+                                        Flexible(
+                                          fit: FlexFit.tight,
+                                          child: Padding(
+                                            padding: EdgeInsets.only(right: 20),
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceAround,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.end,
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Text(
+                                                  snapshot.data["data"][index]['No_kursi'],
+                                                  style: TextStyle(
+                                                      fontSize: 14,
+                                                      fontWeight: FontWeight.bold,
+                                                      color: Colors.white),
+                                                  maxLines: 1,
+                                                  softWrap: false,
+                                                  overflow: TextOverflow.fade,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ); 
+                                    },                                  
+                                ),
+                              );
+                            }
                           ),
                           SizedBox(
                             height: 10,
@@ -438,55 +458,57 @@ class _PilihTiketViewState extends State<PilihTiketView> {
 
                           //MENAMPILKAN TOTAL HARGA
 
-                          Container(
-                            height: 20,
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 20),
-                              child: Row(
-                                children: [
-                                  Text(
-                                    'Total',
-                                    style: GoogleFonts.openSans(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.normal,
-                                      color: Colors.white24,
-                                    ),
-                                  ),
-                                  Flexible(
-                                    fit: FlexFit.tight,
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(right: 20),
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceAround,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.end,
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: const [
-                                          Text(
-                                            '+100',
-                                            style: TextStyle(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.white),
-                                            maxLines: 1,
-                                            softWrap: false,
-                                            overflow: TextOverflow.fade,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
+                          // Container(
+                          //   height: 20,
+                          //   child: Padding(
+                          //     padding: const EdgeInsets.only(left: 20),
+                          //     child: Row(
+                          //       children: [
+                          //         Text(
+                          //           'Total',
+                          //           style: GoogleFonts.openSans(
+                          //             fontSize: 14,
+                          //             fontWeight: FontWeight.normal,
+                          //             color: Colors.white24,
+                          //           ),
+                          //         ),
+                          //         Flexible(
+                          //           fit: FlexFit.tight,
+                          //           child: Padding(
+                          //             padding: const EdgeInsets.only(right: 20),
+                          //             child: Column(
+                          //               mainAxisAlignment:
+                          //                   MainAxisAlignment.spaceAround,
+                          //               crossAxisAlignment:
+                          //                   CrossAxisAlignment.end,
+                          //               mainAxisSize: MainAxisSize.min,
+                          //               children: const [
+                          //                 Text(
+                          //                   '+100',
+                          //                   style: TextStyle(
+                          //                       fontSize: 14,
+                          //                       fontWeight: FontWeight.bold,
+                          //                       color: Colors.white),
+                          //                   maxLines: 1,
+                          //                   softWrap: false,
+                          //                   overflow: TextOverflow.fade,
+                          //                 ),
+                          //               ],
+                          //             ),
+                          //           ),
+                          //         ),
+                          //       ],
+                          //     ),
+                          //   ),
+                          // ),
                         ],
                       ),
                     ),
                     GestureDetector(
                       onTap: () {
-                        
+                        createDataTransaksi();
+                        Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => transaksi()));
                       },
                       child: Container(
                         height: 40,

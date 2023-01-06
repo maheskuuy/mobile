@@ -66,7 +66,7 @@ class _dashboardState extends State<dashboard> {
             padding: EdgeInsets.all(8),
             width: 58,
             child: CircleAvatar(
-                backgroundImage: AssetImage('assets/images/man2.png')),
+                backgroundImage: AssetImage('assets/images/profile.png')),
           ),
         ),
 
@@ -295,10 +295,10 @@ class _dashboardState extends State<dashboard> {
             icon: Icon(Icons.movie),
             label: ('Tiket'),
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.villa),
-            label: ('Bioskop'),
-          ),
+          // BottomNavigationBarItem(
+          //   icon: Icon(Icons.villa),
+          //   label: ('Bioskop'),
+          // ),
         ],
         currentIndex: _selectedNavbar,
         selectedItemColor: Colors.white,
